@@ -46,11 +46,11 @@ namespace TestHabanero.Controllers
         // GET: CarParts
         public ActionResult Index()
         {
-            var cars = _carPartRepository.GetCarPart();
+            var carParts = _carPartRepository.GetCarPart();
             var viewModel = new List<CarPartsIndexViewModel>();
-            if (cars != null)
+            if (carParts != null)
             {
-                viewModel = _mappingEngine.Map<List<CarPart>, List<CarPartsIndexViewModel>>(cars);
+                viewModel = _mappingEngine.Map<List<CarPart>, List<CarPartsIndexViewModel>>(carParts);
             }
             return View(viewModel);
         }

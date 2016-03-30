@@ -132,33 +132,35 @@ namespace HabeneroTests
             Assert.IsNotNull(result);
         }
 
-//        [Test]
-//        public void Index_GivenAllUsersReturnedFromRepository_ShouldReturnViewModel()
-//        {
-//            //---------------Set up test pack-------------------
-//            var part = new CarPartBuilder().WithNewId().Build();
-//            var parts = new List<CarPart> { part };
-//            var repository = Substitute.For<ICarPartRepository>();
-//            var mappingEngine = ResolveMapper();
-//
-//            repository.GetCarPart().Returns(parts);
-//
-//            var partController = CreateBuilder()
-//                .WithCarPartRepository(repository)
-//                .WithMappingEngine(mappingEngine)
-//                .Build();
-//            //---------------Assert Precondition----------------
-//            //---------------Execute Test ----------------------
-//            var result = partController.Index() as ViewResult;
-//            //---------------Test Result -----------------------
-//            Assert.IsNotNull(result);
-//            var model = result.Model as List<CarPartsViewModel>;
-//            Assert.IsInstanceOf<List<CarPartsViewModel>>(model);
-//            Assert.AreEqual(part.CarPartId, model.FirstOrDefault().CarPartId);
-//            Assert.AreEqual(part.CarId, model.FirstOrDefault().CarId);
-//            Assert.AreEqual(part.PartId, model.FirstOrDefault().PartId);
-//            Assert.AreEqual(part.Quantity, model.FirstOrDefault().Quantity);
-//        }
+        [Test]
+        public void Index_GivenAllUsersReturnedFromRepository_ShouldReturnViewModel()
+        {
+            //---------------Set up test pack-------------------
+            var car = new CarBuilder().WithNewId().Build();
+            var part=new PartBuilder().WithNewId().Build();
+            var carPart = new CarPartBuilder().WithNewId().WithCar(car).WithPart(part).Build();
+            var carParts = new List<CarPart> { carPart };
+            var repository = Substitute.For<ICarPartRepository>();
+            var mappingEngine = ResolveMapper();
+
+            repository.GetCarPart().Returns(carParts);
+
+            var partController = CreateBuilder()
+                .WithCarPartRepository(repository)
+                .WithMappingEngine(mappingEngine)
+                .Build();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var result = partController.Index() as ViewResult;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(result);
+            var model = result.Model as List<CarPartsIndexViewModel>;
+            Assert.IsInstanceOf<List<CarPartsIndexViewModel>>(model);
+            Assert.AreEqual(carPart.CarPartId, model.FirstOrDefault().CarPartId);
+            Assert.AreEqual(carPart.CarId, model.FirstOrDefault().CarId);
+            Assert.AreEqual(carPart.PartId, model.FirstOrDefault().PartId);
+            Assert.AreEqual(carPart.Quantity, model.FirstOrDefault().Quantity);
+        }
 
         [Test]
         public void Index_ShouldCallMappingEngine()
@@ -197,7 +199,7 @@ namespace HabeneroTests
         private static IMappingEngine ResolveMapper()
         {
             return ResolveMappingWith(
-                new PartMapping()
+                new CarPartMapping()
                 );
         }
 

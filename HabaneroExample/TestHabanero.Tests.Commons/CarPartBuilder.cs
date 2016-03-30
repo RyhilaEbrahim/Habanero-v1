@@ -36,6 +36,16 @@ namespace TestHabanero.Tests.Commons
             _carPart.CarId = Guid.NewGuid();
             return this;
         }
+        public CarPartBuilder WithCar(Car car)
+        {
+            _carPart.Car= car;
+            return this;
+        }
+        public CarPartBuilder WithPart(Part part)
+        {
+            _carPart.Part=part;
+            return this;
+        }
 
         public CarPart BuildSaved()
         {
