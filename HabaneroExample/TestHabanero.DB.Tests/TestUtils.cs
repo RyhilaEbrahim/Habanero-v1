@@ -6,9 +6,8 @@ namespace TestHabanero.BO.Tests.Util
     {
         public static void SetupFixture()
         {
-
-            Habanero.BO.BORegistry.DataAccessor = new DataAccessorInMemory();
             BOBroker.LoadClassDefs();
         }
+     
     }
 }

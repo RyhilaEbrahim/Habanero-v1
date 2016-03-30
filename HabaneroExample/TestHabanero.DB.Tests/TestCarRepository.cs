@@ -20,6 +20,13 @@ namespace TestHabanero.DB.Tests
             TestUtils.SetupFixture();
         }
 
+        [SetUp]
+        public void SetUp()
+        {
+            Habanero.BO.BORegistry.DataAccessor = new DataAccessorInMemory();
+
+        }
+
         [Test]
         public void GetCars_GivenOneCar_ShouldReturnCar()
         {

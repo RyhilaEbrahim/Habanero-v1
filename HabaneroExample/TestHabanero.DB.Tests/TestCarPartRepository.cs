@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Habanero.BO;
 using NSubstitute;
 using NUnit.Framework;
 using TestHabanero.BO;
 using TestHabanero.BO.Tests.Util;
 using TestHabanero.Tests.Commons;
 using TestHabenaro.Db.Interfaces;
+using TestHabenaro.DB;
 
 namespace TestHabanero.DB.Tests
 {
@@ -17,18 +19,25 @@ namespace TestHabanero.DB.Tests
             TestUtils.SetupFixture();
         }
 
+        [SetUp]
+        public void SetUp()
+        {
+            Habanero.BO.BORegistry.DataAccessor = new DataAccessorInMemory();
+
+        }
+
         [Test]
         public void GetParts_GivenOnePart_ShouldReturnPart()
         {
             //---------------Set up test pack-------------------
-            var car = new CarPartBuilder().WithNewId().Build();
-            var userRepository = Substitute.For<ICarPartRepository>();
+            var car = new CarPartBuilder().WithNewId().BuildSaved();
+            var userRepository = new CarPartRepository();
             var cars = new List<CarPart> { car };
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            userRepository.GetCarPart().Returns(cars);
+            var result = userRepository.GetCarPart();
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, cars.Count);
+            Assert.AreEqual(result.Count, cars.Count);
             var actual = cars.First();
             Assert.AreSame(car, actual);
         }
@@ -37,16 +46,16 @@ namespace TestHabanero.DB.Tests
         public void GetParts_GivenTwoPart_ShouldReturnPart()
         {
             //---------------Set up test pack-------------------
-            var car1 = new CarPartBuilder().WithNewId().Build();
-            var car2 = new CarPartBuilder().WithNewId().Build();
+            var car1 = new CarPartBuilder().WithNewId().BuildSaved();
+            var car2 = new CarPartBuilder().WithNewId().BuildSaved();
 
-            var userRepository = Substitute.For<ICarPartRepository>();
+            var userRepository = new CarPartRepository();
             var cars = new List<CarPart> { car1, car2 };
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            userRepository.GetCarPart().Returns(cars);
+            var result = userRepository.GetCarPart();
             //---------------Test Result -----------------------
-            Assert.AreEqual(2, cars.Count);
+            Assert.AreEqual(result.Count, cars.Count);
 
         }
 
@@ -54,16 +63,16 @@ namespace TestHabanero.DB.Tests
         public void GetParts_GivenThreePart_ShouldReturnPart()
         {
             //---------------Set up test pack-------------------
-            var part1 = new CarPartBuilder().WithNewId().Build();
-            var part2 = new CarPartBuilder().WithNewId().Build();
-            var part3 = new CarPartBuilder().WithNewId().Build();
-            var userRepository = Substitute.For<ICarPartRepository>();
+            var part1 = new CarPartBuilder().WithNewId().BuildSaved();
+            var part2 = new CarPartBuilder().WithNewId().BuildSaved();
+            var part3 = new CarPartBuilder().WithNewId().BuildSaved();
+            var userRepository = new CarPartRepository();
             var cars = new List<CarPart> { part1, part2, part3 };
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            userRepository.GetCarPart().Returns(cars);
+            var result = userRepository.GetCarPart();
             //---------------Test Result -----------------------
-            Assert.AreEqual(3, cars.Count);
+            Assert.AreEqual(result.Count, cars.Count);
 
         }
         
@@ -71,14 +80,14 @@ namespace TestHabanero.DB.Tests
         public void GetPartBy_GivenPartId_ShouldReturnPart()
         {
             //---------------Set up test pack-------------------
-            var part = new CarPartBuilder().WithNewId().Build();
-            var userRepository = Substitute.For<ICarPartRepository>();
+            var part = new CarPartBuilder().WithNewId().BuildSaved();
+            var userRepository = new CarPartRepository();
             var parts = new List<CarPart> { part };
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            userRepository.GetCarPartBy(part.PartId).Returns(part);
+            var result = userRepository.GetCarPartBy(part.CarPartId);
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, parts.Count);
+            Assert.AreEqual(result.CarPartId, parts.FirstOrDefault().CarPartId);
             var actual = parts.First();
             Assert.AreSame(part, actual);
         }
@@ -87,41 +96,41 @@ namespace TestHabanero.DB.Tests
         public void Save_GivenNewPart_ShouldSave()
         {
             //---------------Set up test pack-------------------
-            var car = new CarPartBuilder().WithNewId().Build();
-            var userRepository = Substitute.For<ICarPartRepository>();
+            var car = new CarPartBuilder().WithNewId().BuildSaved();
+            var userRepository = new CarPartRepository();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             userRepository.Save(car);
             //---------------Test Result -----------------------
-            userRepository.Received().Save(car);
+           
         }
 
         [Test]
         public void Update_GivenExistingPart_ShouldUpdateAndSave()
         {
             //---------------Set up test pack-------------------
-            var existingPart = new CarPartBuilder().WithNewId().Build();
-            var userRepository = Substitute.For<ICarPartRepository>();
-            userRepository.GetCarPartBy(existingPart.PartId).Returns(existingPart);
+            var existingPart = new CarPartBuilder().WithNewId().BuildSaved();
+            var userRepository =new CarPartRepository();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             userRepository.Update(existingPart, existingPart);
+            var parts = Broker.GetBusinessObjectCollection<CarPart>("");
             //---------------Test Result -----------------------
-            userRepository.Received().Update(existingPart, existingPart);
+            Assert.AreEqual(1, parts.Count);
         }
 
         [Test]
         public void Delete_GivenExistingPart_ShouldDeleteAndSave()
         {
             //---------------Set up test pack-------------------
-            var part = new CarPartBuilder().WithNewId().Build();
-            var userRepository = Substitute.For<ICarPartRepository>();
-            userRepository.GetCarPartBy(part.PartId).Returns(part);
-            //---------------Assert Precondition----------------
+            var carPart = new CarPartBuilder().WithNewId().BuildSaved();
+            var carParts = Broker.GetBusinessObjectCollection<CarPart>("");
+            var userRepository = new CarPartRepository();
+            Assert.AreEqual(1, carParts.Count);
             //---------------Execute Test ----------------------
-            userRepository.Delete(part);
+            userRepository.Delete(carPart);
             //---------------Test Result -----------------------
-            userRepository.Received().Delete(part);
+            Assert.AreEqual(0, carParts.Count);
         }
     }
 }
