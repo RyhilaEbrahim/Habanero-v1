@@ -537,7 +537,7 @@ namespace HabeneroTests
                 );
         }
 
-        public static IMappingEngine ResolveMappingWith(params Profile[] profiles)
+        private static IMappingEngine ResolveMappingWith(params Profile[] profiles)
         {
             Mapper.Initialize(cfg =>
             {

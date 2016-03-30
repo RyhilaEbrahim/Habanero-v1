@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Habanero.BO;
-using NSubstitute;
 using NUnit.Framework;
 using TestHabanero.BO;
 using TestHabanero.BO.Tests.Util;
 using TestHabanero.Tests.Commons;
-using TestHabenaro.Db.Interfaces;
 using TestHabenaro.DB;
 
 namespace TestHabanero.DB.Tests

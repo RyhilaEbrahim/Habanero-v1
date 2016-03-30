@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Habanero.BO;
-using NSubstitute;
 using NUnit.Framework;
 using TestHabanero.BO;
 using TestHabanero.BO.Tests.Util;
 using TestHabanero.Tests.Commons;
-using TestHabenaro.Db.Interfaces;
 using TestHabenaro.DB;
 
 namespace TestHabanero.DB.Tests
@@ -27,7 +25,7 @@ namespace TestHabanero.DB.Tests
         }
 
         [Test]
-        public void GetParts_GivenOnePart_ShouldReturnPart()
+        public void GetCarParts_GivenOneCarPart_ShouldReturnCarPart()
         {
             //---------------Set up test pack-------------------
             var car = new CarPartBuilder().WithNewId().BuildSaved();
@@ -43,7 +41,7 @@ namespace TestHabanero.DB.Tests
         }
 
         [Test]
-        public void GetParts_GivenTwoPart_ShouldReturnPart()
+        public void GetCarParts_GivenTwoCarParts_ShouldReturnCarParts()
         {
             //---------------Set up test pack-------------------
             var car1 = new CarPartBuilder().WithNewId().BuildSaved();
@@ -60,7 +58,7 @@ namespace TestHabanero.DB.Tests
         }
 
         [Test]
-        public void GetParts_GivenThreePart_ShouldReturnPart()
+        public void GetParts_GivenThreeCarParts_ShouldReturnCarParts()
         {
             //---------------Set up test pack-------------------
             var part1 = new CarPartBuilder().WithNewId().BuildSaved();
@@ -77,7 +75,7 @@ namespace TestHabanero.DB.Tests
         }
         
         [Test]
-        public void GetPartBy_GivenPartId_ShouldReturnPart()
+        public void GetCarPartBy_GivenCarPartId_ShouldReturnCarPart()
         {
             //---------------Set up test pack-------------------
             var part = new CarPartBuilder().WithNewId().BuildSaved();
@@ -93,7 +91,7 @@ namespace TestHabanero.DB.Tests
         }
 
         [Test]
-        public void Save_GivenNewPart_ShouldSave()
+        public void Save_GivenNewCarPart_ShouldSave()
         {
             //---------------Set up test pack-------------------
             var car = new CarPartBuilder().WithNewId().BuildSaved();
@@ -106,7 +104,7 @@ namespace TestHabanero.DB.Tests
         }
 
         [Test]
-        public void Update_GivenExistingPart_ShouldUpdateAndSave()
+        public void Update_GivenExistingCarPart_ShouldUpdateAndSave()
         {
             //---------------Set up test pack-------------------
             var existingPart = new CarPartBuilder().WithNewId().BuildSaved();
@@ -120,7 +118,7 @@ namespace TestHabanero.DB.Tests
         }
 
         [Test]
-        public void Delete_GivenExistingPart_ShouldDeleteAndSave()
+        public void Delete_GivenExistingCarPart_ShouldDeleteAndSave()
         {
             //---------------Set up test pack-------------------
             var carPart = new CarPartBuilder().WithNewId().BuildSaved();
