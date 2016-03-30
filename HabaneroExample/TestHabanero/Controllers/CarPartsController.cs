@@ -120,7 +120,10 @@ namespace TestHabanero.Controllers
                 _carPartRepository.Update(carPart, newCar);
                 return RedirectToAction("Index");
             }
+            viewModel.CarSelectListItems = GetAllCars(viewModel.CarId);
+            viewModel.PartsSelectListItems = GetAllParts(viewModel.PartId);
             return View(viewModel);
+
         }
 
 

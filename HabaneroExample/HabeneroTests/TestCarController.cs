@@ -248,7 +248,7 @@ namespace HabeneroTests
             var car = new CarBuilder().Build();
             var id = car.CarId;
             var mappingEngine = ResolveMapper();
-//            mappingEngine.Map<CarViewModel>(car).Returns(carViewModel);
+
             var carRepository = Substitute.For<ICarRepository>();
             carRepository.GetCarBy(id).Returns(car);
             var carController = CreateBuilder()
